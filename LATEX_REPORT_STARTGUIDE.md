@@ -39,7 +39,7 @@ git clone https://github.com/gimmatek/report-latex-template.git latex-template
 # │   ├── packages/
 # │   │   ├── gimmatek-report-template.cls
 # │   │   └── gimmatek-report-frontmatter.sty
-# │   └── img/
+# │   └── assets/
 # │       └── gimmatek_confidential.png
 # ├── your_document.tex
 # └── chapters/
@@ -52,11 +52,11 @@ git clone https://github.com/gimmatek/report-latex-template.git latex-template
 mkdir -p latex-template/packages latex-template/img
 
 # Copy package files
-cp path/to/gimmatek-report-template.cls latex-template/packages/
-cp path/to/gimmatek-report-frontmatter.sty latex-template/packages/
+cp path/to/gimmatek-report-template.cls latex-template/src/
+cp path/to/gimmatek-report-frontmatter.sty latex-template/src/
 
 # Copy assets
-cp path/to/gimmatek_confidential.png latex-template/img/
+cp path/to/gimmatek_confidential.png latex-template/assets/
 ```
 
 ### ⚠️ Important for AI Agents
@@ -78,7 +78,7 @@ my_report/
 │   ├── packages/
 │   │   ├── gimmatek-report-template.cls
 │   │   └── gimmatek-report-frontmatter.sty
-│   └── img/
+│   └── assets/
 │       └── gimmatek_confidential.png
 ├── main.tex                     # Your main document
 ├── chapters/                    # Your content
@@ -86,7 +86,7 @@ my_report/
 │   ├── ch_2.tex
 │   └── ch_3.tex
 ├── figures/                     # Your figures (optional)
-└── img/                         # Your images (optional)
+└── assets/                         # Your images (optional)
     └── cover.png
 ```
 
@@ -103,7 +103,7 @@ Create `main.tex`:
 
 % Load the abstraction package from template subfolder
 \makeatletter
-\def\input@path{{latex-template/packages/}}
+\def\input@path{{latex-template/src/}}
 \makeatother
 \RequirePackage{gimmatek-report-frontmatter}
 
@@ -150,7 +150,7 @@ Add to compile command:
 
 ```bash
 # Linux/macOS
-export TEXINPUTS=.:./latex-template/packages//:
+export TEXINPUTS=.:./latex-template/src//:
 xelatex main.tex
 
 # Or use a Makefile (see Step 5)
@@ -303,8 +303,8 @@ xelatex main.tex
 
 **Cover Page:**
 ```latex
-\makecover                        % Use default img/cover.png
-\makecover[img/custom_cover.png]  % Custom cover
+\makecover                        % Use default assets/cover.png
+\makecover[assets/custom_cover.png]  % Custom cover
 ```
 
 ---
@@ -318,7 +318,7 @@ Create `Makefile`:
 ```makefile
 # Makefile for LaTeX compilation with template
 
-TEXINPUTS := .:./latex-template/packages//:
+TEXINPUTS := .:./latex-template/src//:
 export TEXINPUTS
 
 MAIN = main
@@ -349,7 +349,7 @@ make clean     # Remove auxiliary files
 
 ```bash
 # Set TEXINPUTS to find template packages
-export TEXINPUTS=.:./latex-template/packages//:
+export TEXINPUTS=.:./latex-template/src//:
 
 # Compile (run twice for references)
 xelatex main.tex
@@ -420,7 +420,7 @@ AI: Document created! To compile:
       make
 
     Option 2 (Manual):
-      export TEXINPUTS=.:./latex-template/packages//:
+      export TEXINPUTS=.:./latex-template/src//:
       xelatex main.tex
       xelatex main.tex
 
@@ -499,7 +499,7 @@ mkdir my_report && cd my_report
 # [Create main.tex and chapters/]
 
 # 3. Compile
-export TEXINPUTS=.:./latex-template/packages//:
+export TEXINPUTS=.:./latex-template/src//:
 xelatex main.tex
 xelatex main.tex
 
@@ -515,7 +515,7 @@ make
 ```latex
 \documentclass[12pt,a4paper]{gimmatek-report-template}
 \makeatletter
-\def\input@path{{latex-template/packages/}}
+\def\input@path{{latex-template/src/}}
 \makeatother
 \RequirePackage{gimmatek-report-frontmatter}
 
@@ -538,7 +538,7 @@ make
 
 **Compile:**
 ```bash
-export TEXINPUTS=.:./latex-template/packages//:
+export TEXINPUTS=.:./latex-template/src//:
 xelatex main.tex
 xelatex main.tex
 ```

@@ -1,14 +1,14 @@
 %===============================================================================
-% SMARTEHR FRONT MATTER PACKAGE
+% GIMMATEK REPORT FRONT MATTER PACKAGE
 %===============================================================================
 % Description: Provides abstracted commands for generating front matter
 %              including cover page, abstract, TOC, LOT, and LOF
 % Author: Generated from LaTeX Analysis
-% Version: 1.0
+% Version: 2.0.0
 % Date: 2026-03-28
 %===============================================================================
 
-\ProvidesPackage{gimmatek-report-template-frontmatter}[2026/03/28 v1.0 Gimmatek Report Front Matter Abstraction]
+\ProvidesPackage{gimmatek-report-frontmatter}[2026/03/28 v2.0.0 Gimmatek Report Front Matter Abstraction]
 
 %-------------------------------------------------------------------------------
 % Required Packages
@@ -25,6 +25,7 @@
 %-------------------------------------------------------------------------------
 % Cover Page Configuration
 %-------------------------------------------------------------------------------
+% Note: Logo path configuration is now handled in gimmatek-report-template.cls
 \newcommand{\@coverimage}{img/cover.png}
 \newcommand{\coverimage}[1]{\renewcommand{\@coverimage}{#1}}
 
@@ -35,6 +36,23 @@
 \newif\ifincludelot   \includelottrue
 \newif\ifincludelof   \includeloftrue
 \newif\ifincludeabstract   \includeabstracttrue
+
+%-------------------------------------------------------------------------------
+% Table of Contents Depth Control
+%-------------------------------------------------------------------------------
+% Control which levels appear in TOC
+% Level 0 = chapters only
+% Level 1 = chapters + sections
+% Level 2 = chapters + sections + subsections (default)
+% Level 3 = chapters + sections + subsections + subsubsections
+
+\newcommand{\tocchaptersonly}{\setcounter{tocdepth}{0}}
+\newcommand{\tocsections}{\setcounter{tocdepth}{1}}
+\newcommand{\tocsubsections}{\setcounter{tocdepth}{2}}
+\newcommand{\tocsubsubsections}{\setcounter{tocdepth}{3}}
+
+% Set default TOC depth to subsections
+\setcounter{tocdepth}{2}
 
 %-------------------------------------------------------------------------------
 % Cover Page Generation
@@ -120,15 +138,10 @@
   \setcounter{tocdepth}{#1}
 }
 
-% Convenience commands for common TOC depth settings
-\newcommand{\tocchaptersonly}{\setcounter{tocdepth}{0}}      % Chapters only
-\newcommand{\tocsections}{\setcounter{tocdepth}{1}}         % Up to sections
-\newcommand{\tocsubsections}{\setcounter{tocdepth}{2}}      % Up to subsections (default)
-\newcommand{\tocsubsubsections}{\setcounter{tocdepth}{3}}   % Up to subsubsections
-
 %-------------------------------------------------------------------------------
 % Quick Front Matter Presets
 %-------------------------------------------------------------------------------
+% Note: TOC depth commands already defined earlier in this file
 % Minimal: Only TOC
 \newcommand{\makeminimalfrontmatter}{%
   \includelotfalse

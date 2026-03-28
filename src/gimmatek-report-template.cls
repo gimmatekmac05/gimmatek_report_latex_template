@@ -1,6 +1,7 @@
 %% gimmatek-report-template.cls
 %% LaTeX Document Class for Gimmatek Report Technical Documentation
-%% Version 2.0
+%% Version 2.0.0
+%% Date: 2026-03-28
 %%
 %% This class provides a professional, engineering-focused style for
 %% technical manuals and system documentation, featuring:
@@ -13,7 +14,7 @@
 %% - Comprehensive header/footer management
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{gimmatek-report-template}[2025/03/27 v2.0 Gimmatek Report Technical Documentation Class]
+\ProvidesClass{gimmatek-report-template}[2026/03/28 v2.0.0 Gimmatek Report Technical Documentation Class]
 
 %% ============================================================================
 %% Class Options
@@ -37,6 +38,22 @@
 
 % Load base class
 \LoadClass{report}
+
+%% ============================================================================
+%% Define \frontmatter and \mainmatter Commands
+%% ============================================================================
+% The report class doesn't define these (only book class does)
+% We define them here for compatibility with documentation examples
+
+\newcommand{\frontmatter}{%
+  \cleardoublepage
+  \pagenumbering{roman}
+}
+
+\newcommand{\mainmatter}{%
+  \cleardoublepage
+  \pagenumbering{arabic}
+}
 
 %% ============================================================================
 %% Required Packages
@@ -90,16 +107,82 @@
 \RequirePackage[hidelinks]{hyperref}
 
 %% ============================================================================
-%% Font Configuration
+%% Font Configuration with Cross-Platform Support
 %% ============================================================================
 
-% Set CJK fonts (can be customized per system)
-\setCJKmainfont{PingFang TC}
-\setCJKmonofont{PingFang TC}
-\setmonofont{Menlo}
+\RequirePackage{iftex}
+
+% Cross-platform font configuration using font detection (more reliable than platform detection)
+% Try fonts in preference order: macOS → Windows → Linux
+
+% Try macOS fonts first (PingFang TC)
+\IfFontExistsTF{PingFang TC}{
+  \setCJKmainfont{PingFang TC}
+  \setCJKmonofont{PingFang TC}
+  \IfFontExistsTF{Menlo}{
+    \setmonofont{Menlo}
+  }{
+    \setmonofont{Courier}
+  }
+  \PackageInfo{gimmatek-report-template}{Using macOS fonts (PingFang TC)}
+}{
+  % Try Windows fonts (Microsoft JhengHei)
+  \IfFontExistsTF{Microsoft JhengHei}{
+    \setCJKmainfont{Microsoft JhengHei}
+    \setCJKmonofont{Microsoft JhengHei}
+    \IfFontExistsTF{Consolas}{
+      \setmonofont{Consolas}
+    }{
+      \setmonofont{Courier New}
+    }
+    \PackageInfo{gimmatek-report-template}{Using Windows fonts (Microsoft JhengHei)}
+  }{
+    % Try Linux fonts (Noto Sans CJK TC)
+    \IfFontExistsTF{Noto Sans CJK TC}{
+      \setCJKmainfont{Noto Sans CJK TC}
+      \setCJKmonofont{Noto Serif CJK TC}
+      \IfFontExistsTF{DejaVu Sans Mono}{
+        \setmonofont{DejaVu Sans Mono}
+      }{
+        \setmonofont{Courier}
+      }
+      \PackageInfo{gimmatek-report-template}{Using Linux fonts (Noto Sans CJK TC)}
+    }{
+      % No suitable CJK fonts found - warn but don't fail
+      \PackageWarning{gimmatek-report-template}{
+        No suitable CJK fonts found. Chinese text may not display correctly.\MessageBreak
+        Install one of the following:\MessageBreak
+        - macOS: PingFang TC (pre-installed)\MessageBreak
+        - Windows: Microsoft JhengHei (pre-installed)\MessageBreak
+        - Linux: sudo apt install fonts-noto-cjk\MessageBreak
+        Falling back to system default CJK font.
+      }
+      % Let xeCJK use its default fallback (Fandol)
+      \setmonofont{Courier}
+    }
+  }
+}
 
 % Adjust header height for fancy headers (two rows: logo + title)
 \setlength{\headheight}{45pt}
+
+%% ============================================================================
+%% Logo Path Configuration
+%% ============================================================================
+% Default logo path - points to template subfolder
+% Users can override with \logopath{custom/path/to/logo.png}
+\newcommand{\@logopath}{gimmatek_report_latex_template/assets/gimmatek_confidential.png}
+\newcommand{\logopath}[1]{\renewcommand{\@logopath}{#1}}
+
+% Helper command to conditionally include logo with fallback
+\newcommand{\@includelogoifexists}[1]{%
+  \IfFileExists{\@logopath}{%
+    \includegraphics[height=#1]{\@logopath}%
+  }{%
+    % Logo file not found, display placeholder
+    \textcolor{svMuted}{\scriptsize [Logo]}%
+  }%
+}
 
 %% ============================================================================
 %% Color Definitions (Stanford/Silicon Valley Style)
@@ -207,7 +290,7 @@
   }%
 }
 \fancyhead[C]{}
-\fancyhead[R]{\hspace*{-0.2cm}\includegraphics[height=0.5cm]{img/gimmatek_confidential.png}}
+\fancyhead[R]{\hspace*{-0.2cm}\@includelogoifexists{0.5cm}}
 
 % Use \chaptername so appendix uses the localized label automatically.
 \renewcommand{\chaptermark}[1]{\markboth{\chaptername \thechapter.~#1}{}}
@@ -229,7 +312,7 @@
     }%
   }
   \fancyhead[C]{}
-  \fancyhead[R]{\hspace*{-0.2cm}\includegraphics[height=0.6cm]{img/gimmatek_confidential.png}}
+  \fancyhead[R]{\hspace*{-0.2cm}\@includelogoifexists{0.6cm}}
   \fancyfoot[C]{\thepage}
   \renewcommand{\headrulewidth}{0pt}
 }

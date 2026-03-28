@@ -51,6 +51,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.0.0] - 2026-03-28
+
+### Added
+- Cross-platform font detection (macOS/Windows/Linux)
+- Configurable logo path with automatic fallback
+- `\frontmatter` and `\mainmatter` commands for report class
+- `standalone_example.tex` - Example for project root usage
+- Production-ready Makefiles for template and projects
+- TOC depth control commands
+- Comprehensive error messages with installation hints
+
+### Fixed
+- **Critical**: Fixed undefined `\frontmatter`/`\mainmatter` commands
+- **Critical**: Fixed package name mismatch warning
+- **Critical**: Fixed hardcoded image path breaking template
+- Font compatibility issues on Linux and Windows
+- Version number inconsistencies
+
+### Changed
+- Reorganized repository structure (src/, assets/, tools/)
+- Improved documentation clarity
+- Enhanced font configuration with platform detection
+- Logo system now gracefully handles missing files
+
+### Documentation
+- Updated all examples to use new features
+- Added cross-platform installation instructions
+- Improved AI agent instructions
+- Added troubleshooting for common issues
+
+---
+
 ## [Unreleased]
 
 ### Planned
@@ -62,4 +94,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[1.0.0]: https://github.com/gimmatek/report-latex-template/releases/tag/v1.0.0
+[2.0.0]: https://github.com/gimmatekmac05/gimmatek_report_latex_template/releases/tag/v2.0.0
+[1.0.0]: https://github.com/gimmatekmac05/gimmatek_report_latex_template/releases/tag/v1.0.0

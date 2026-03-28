@@ -10,7 +10,7 @@
 % Include template packages from parent directory structure
 % Adjust path if your structure is different
 \makeatletter
-\def\input@path{{../packages/}}
+\def\input@path{{../src/}}
 \makeatother
 \RequirePackage{gimmatek-report-frontmatter}
 
@@ -137,7 +137,7 @@ That's it! The template handles the rest.
 % 1. Ensure you have XeLaTeX installed
 %
 % 2. Set TEXINPUTS to find the template packages:
-%    export TEXINPUTS=.:../packages//:
+%    export TEXINPUTS=.:../src//:
 %
 % 3. Compile (run twice for references):
 %    xelatex minimal_example.tex

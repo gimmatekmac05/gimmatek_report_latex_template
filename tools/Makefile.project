@@ -1,0 +1,74 @@
+# Makefile for Projects Using Gimmatek LaTeX Template
+# Copy this file to your project root as "Makefile"
+# Usage: make          # Build PDF
+#        make clean    # Remove auxiliary files
+#        make view     # Open PDF after building
+
+# Set TEXINPUTS to find template packages
+TEXINPUTS := .:./gimmatek_report_latex_template/src//:
+export TEXINPUTS
+
+# Main document name (change this to match your .tex file)
+MAIN = main
+PDF = $(MAIN).pdf
+
+# Chapter dependencies (add your chapter files here)
+CHAPTERS = $(wildcard chapters/*.tex)
+
+.PHONY: all clean distclean view help
+
+all: $(PDF)
+
+$(PDF): $(MAIN).tex $(CHAPTERS)
+	@echo "Compiling $(MAIN).tex (first pass)..."
+	xelatex -interaction=nonstopmode $(MAIN).tex
+	@echo "Compiling $(MAIN).tex (second pass for references)..."
+	xelatex -interaction=nonstopmode $(MAIN).tex
+	@echo "✓ Compilation complete: $(PDF)"
+
+clean:
+	@echo "Cleaning auxiliary files..."
+	@rm -f *.aux *.log *.out *.toc *.lof *.lot *.synctex.gz *.fdb_latexmk *.fls
+	@echo "✓ Clean complete"
+
+distclean: clean
+	@echo "Removing PDF..."
+	@rm -f $(PDF)
+	@echo "✓ Deep clean complete"
+
+view: $(PDF)
+	@echo "Opening $(PDF)..."
+	@if [ "$$(uname)" = "Darwin" ]; then \
+		open $(PDF); \
+	elif [ "$$(uname)" = "Linux" ]; then \
+		xdg-open $(PDF) 2>/dev/null || evince $(PDF) 2>/dev/null || echo "Please open $(PDF) manually"; \
+	else \
+		echo "Platform not supported for auto-view. Please open $(PDF) manually"; \
+	fi
+
+watch:
+	@echo "Watching for changes... (press Ctrl+C to stop)"
+	@while true; do \
+		inotifywait -q -e modify $(MAIN).tex $(CHAPTERS) 2>/dev/null || fswatch -1 $(MAIN).tex $(CHAPTERS) 2>/dev/null || (echo "Install inotify-tools or fswatch for watch mode" && exit 1); \
+		make --no-print-directory; \
+	done
+
+help:
+	@echo "Gimmatek LaTeX Project Makefile"
+	@echo ""
+	@echo "Configuration:"
+	@echo "  MAIN = $(MAIN)    (change this to your main .tex filename)"
+	@echo ""
+	@echo "Available targets:"
+	@echo "  make           - Build PDF (runs xelatex twice)"
+	@echo "  make clean     - Remove auxiliary files (.aux, .log, etc.)"
+	@echo "  make distclean - Remove auxiliary files and PDF"
+	@echo "  make view      - Build and open PDF in viewer"
+	@echo "  make watch     - Auto-rebuild on file changes (requires inotify-tools or fswatch)"
+	@echo "  make help      - Show this help message"
+	@echo ""
+	@echo "Example workflow:"
+	@echo "  1. Copy this file to your project root as 'Makefile'"
+	@echo "  2. Update MAIN variable to match your main .tex filename"
+	@echo "  3. Run 'make' to build your PDF"
+	@echo "  4. Run 'make view' to build and open the PDF"

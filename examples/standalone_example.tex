@@ -1,0 +1,288 @@
+%===============================================================================
+% STANDALONE EXAMPLE: Using Template from Project Root
+%===============================================================================
+% This example shows how to use the template when it's cloned as a subfolder
+% in your project root (the recommended approach for most projects).
+%
+% Directory structure:
+%   your_project/
+%   ├── gimmatek_report_latex_template/  ← cloned template
+%   │   ├── src/
+%   │   │   ├── gimmatek-report-template.cls
+%   │   │   └── gimmatek-report-frontmatter.sty
+%   │   └── assets/
+%   ├── standalone_example.tex  ← this file (copy to your project root)
+%   └── chapters/
+%       ├── chapter1.tex
+%       └── chapter2.tex
+%===============================================================================
+
+\documentclass[12pt,a4paper]{gimmatek-report-template}
+
+% Point to template packages in subfolder
+\makeatletter
+\def\input@path{{gimmatek_report_latex_template/src/}}
+\makeatother
+\RequirePackage{gimmatek-report-frontmatter}
+
+%-------------------------------------------------------------------------------
+% Document Metadata
+%-------------------------------------------------------------------------------
+\doctitle{Standalone Project Example}
+\doctitlepage{Standalone Project\\Example Document}
+\docsubtitle{Using Template from Project Root}
+\docversion{V1.0}
+\doctype{Technical Documentation}
+
+%-------------------------------------------------------------------------------
+% Abstract
+%-------------------------------------------------------------------------------
+\docabstract{%
+This example demonstrates using the Gimmatek LaTeX Template from your project
+root directory. This is the recommended setup for most projects as it keeps
+the template self-contained and version-controlled within your project.
+
+Key benefits of this approach:
+\begin{itemize}
+\item Template is version-locked to your project
+\item No system-wide installation required
+\item Works offline and in CI/CD environments
+\item Easy to share with collaborators
+\end{itemize}
+}
+
+%===============================================================================
+% DOCUMENT BODY
+%===============================================================================
+\begin{document}
+
+%-------------------------------------------------------------------------------
+% Front Matter
+%-------------------------------------------------------------------------------
+\frontmatter
+\makefrontmatter
+
+%-------------------------------------------------------------------------------
+% Main Content
+%-------------------------------------------------------------------------------
+\mainmatter
+
+\chapter{Introduction}
+
+This document shows the recommended way to use the Gimmatek LaTeX Template:
+clone it into your project as a subfolder.
+
+\section{Setup Instructions}
+
+To use this approach in your own project:
+
+\begin{enumerate}
+\item Clone the template into your project:
+\begin{verbatim}
+cd your_project/
+git clone https://github.com/gimmatekmac05/\
+  gimmatek_report_latex_template.git
+\end{verbatim}
+
+\item Copy this file to your project root
+
+\item Update the metadata section with your document details
+
+\item Create a \texttt{chapters/} folder for your content
+
+\item Compile with XeLaTeX:
+\begin{verbatim}
+xelatex standalone_example.tex
+xelatex standalone_example.tex
+\end{verbatim}
+\end{enumerate}
+
+\section{Path Configuration}
+
+The key difference from the examples directory version is the path configuration:
+
+\begin{verbatim}
+\makeatletter
+\def\input@path{{gimmatek_report_latex_template/src/}}
+\makeatother
+\end{verbatim}
+
+This tells LaTeX to look for packages in the \texttt{gimmatek\_report\_latex\_template/src/}
+subdirectory relative to your document.
+
+\chapter{Features}
+
+\section{Automatic Front Matter}
+
+The template automatically generates all front matter elements:
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\textbf{Element} & \textbf{Description} \\
+\midrule
+Abstract & Chinese-titled abstract page (摘要) \\
+Table of Contents & Automatic TOC with configurable depth \\
+List of Tables & Generated if document contains tables \\
+List of Figures & Generated if document contains figures \\
+Page Numbering & Roman numerals (front matter) → Arabic (main) \\
+\bottomrule
+\end{tabularx}
+\caption{Automatically Generated Elements}
+\label{tab:elements}
+\end{table}
+
+\section{Customization Options}
+
+You can customize the front matter by setting flags before calling
+\texttt{\textbackslash makefrontmatter}:
+
+\begin{verbatim}
+% Disable specific elements
+\includetocfalse     % Skip table of contents
+\includelotfalse     % Skip list of tables
+\includeloffalse     % Skip list of figures
+\includeabstractfalse % Skip abstract
+\end{verbatim}
+
+\section{Logo Configuration}
+
+The template includes a configurable logo system with automatic fallback:
+
+\begin{verbatim}
+% Use custom logo (optional)
+\logopath{path/to/your/logo.png}
+\end{verbatim}
+
+If the logo file doesn't exist, the template will display a placeholder
+instead of failing.
+
+\chapter{Multi-File Projects}
+
+\section{Using Separate Chapter Files}
+
+For larger projects, split content into separate files:
+
+\begin{verbatim}
+% In your main .tex file:
+\mainmatter
+\input{chapters/chapter1.tex}
+\input{chapters/chapter2.tex}
+\input{chapters/chapter3.tex}
+\end{verbatim}
+
+\section{Example Chapter Structure}
+
+Create \texttt{chapters/chapter1.tex}:
+
+\begin{verbatim}
+\chapter{First Chapter}
+
+\section{Introduction}
+
+Content goes here...
+\end{verbatim}
+
+No \texttt{\textbackslash begin\{document\}} or
+\texttt{\textbackslash end\{document\}} in chapter files!
+
+\chapter{Compilation}
+
+\section{Using Makefile}
+
+For convenience, create a \texttt{Makefile}:
+
+\begin{verbatim}
+TEXINPUTS := .:./gimmatek_report_latex_template/src//:
+export TEXINPUTS
+
+all: standalone_example.pdf
+
+standalone_example.pdf: standalone_example.tex
+    xelatex standalone_example.tex
+    xelatex standalone_example.tex
+
+clean:
+    rm -f *.aux *.log *.toc *.lot *.lof *.out
+
+.PHONY: all clean
+\end{verbatim}
+
+Then simply run: \texttt{make}
+
+\section{Environment Variable Method}
+
+Alternatively, set \texttt{TEXINPUTS} in your shell:
+
+\begin{verbatim}
+export TEXINPUTS=.:./gimmatek_report_latex_template/src//:
+xelatex standalone_example.tex
+\end{verbatim}
+
+\chapter{Version Control}
+
+\section{Git Integration}
+
+You have two options for version control:
+
+\subsection{Option 1: Git Submodule (Recommended)}
+
+\begin{verbatim}
+git submodule add \
+  https://github.com/gimmatekmac05/\
+  gimmatek_report_latex_template.git
+\end{verbatim}
+
+Benefits:
+\begin{itemize}
+\item Template updates tracked separately
+\item Easy to update template version
+\item Cleaner project history
+\end{itemize}
+
+\subsection{Option 2: Direct Clone}
+
+\begin{verbatim}
+git clone https://github.com/gimmatekmac05/\
+  gimmatek_report_latex_template.git
+\end{verbatim}
+
+Benefits:
+\begin{itemize}
+\item Simpler setup
+\item Self-contained project
+\item No submodule complexity
+\end{itemize}
+
+\chapter{Conclusion}
+
+This standalone approach provides the best balance of:
+\begin{itemize}
+\item Ease of use
+\item Portability
+\item Version control
+\item Team collaboration
+\end{itemize}
+
+Start your own project by copying this file and customizing it for your needs!
+
+\end{document}
+
+%===============================================================================
+% QUICK START
+%===============================================================================
+%
+% 1. Clone template into your project:
+%    git clone https://github.com/gimmatekmac05/\
+%      gimmatek_report_latex_template.git
+%
+% 2. Copy this file to project root
+%
+% 3. Compile:
+%    xelatex standalone_example.tex
+%    xelatex standalone_example.tex
+%
+% 4. Done! Edit and rebuild as needed.
+%
+%===============================================================================

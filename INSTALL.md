@@ -27,7 +27,7 @@ git clone https://github.com/gimmatek/report-latex-template.git latex-template
 ```latex
 \documentclass{gimmatek-report-template}
 \makeatletter
-\def\input@path{{latex-template/packages/}}
+\def\input@path{{latex-template/src/}}
 \makeatother
 \RequirePackage{gimmatek-report-frontmatter}
 ```
@@ -142,7 +142,7 @@ Works!
 EOF
 
 # Compile
-export TEXINPUTS=.:./latex-template/packages//:  # If using Method 1
+export TEXINPUTS=.:./latex-template/src//:  # If using Method 1
 xelatex test.tex
 ```
 
@@ -158,7 +158,7 @@ If you see `test.pdf`, installation successful! ✅
 ```latex
 % In your document, add:
 \makeatletter
-\def\input@path{{latex-template/packages/}}
+\def\input@path{{latex-template/src/}}
 \makeatother
 ```
 

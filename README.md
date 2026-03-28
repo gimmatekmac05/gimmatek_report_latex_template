@@ -14,7 +14,7 @@ git clone https://github.com/gimmatek/report-latex-template.git latex-template
 cat > main.tex << 'EOF'
 \documentclass[12pt,a4paper]{gimmatek-report-template}
 \makeatletter
-\def\input@path{{latex-template/packages/}}
+\def\input@path{{latex-template/src/}}
 \makeatother
 \RequirePackage{gimmatek-report-frontmatter}
 
@@ -34,7 +34,7 @@ Content here...
 EOF
 
 # 3. Compile
-export TEXINPUTS=.:./latex-template/packages//:
+export TEXINPUTS=.:./latex-template/src//:
 xelatex main.tex
 xelatex main.tex
 ```
@@ -47,13 +47,19 @@ xelatex main.tex
 gimmatek_report_latex_template/
 ├── README.md                          # This file
 ├── LATEX_REPORT_STARTGUIDE.md        # Complete guide for AI agents & users
-├── packages/
+├── CHANGELOG.md                       # Version history
+├── UPGRADE_GUIDE_v2.0.0.md           # Upgrade instructions
+├── src/
 │   ├── gimmatek-report-template.cls                   # Document class
 │   └── gimmatek-report-frontmatter.sty       # Front matter abstraction
-├── img/
+├── assets/
 │   └── gimmatek_confidential.png      # Company logo/watermark
 ├── examples/
-│   └── minimal_example.tex            # Minimal working example
+│   ├── minimal_example.tex            # Minimal working example
+│   └── standalone_example.tex         # Project root example
+├── tools/
+│   ├── Makefile                       # Build examples
+│   └── Makefile.project               # Template for projects
 └── docs/
     ├── LATEX_ANALYSIS.md              # Detailed analysis
     └── ABSTRACTION_GUIDE.md           # User guide
@@ -107,7 +113,7 @@ gimmatek_report_latex_template/
 ```latex
 \documentclass{gimmatek-report-template}
 \makeatletter
-\def\input@path{{latex-template/packages/}}
+\def\input@path{{latex-template/src/}}
 \makeatother
 \RequirePackage{gimmatek-report-frontmatter}
 
