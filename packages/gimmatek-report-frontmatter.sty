@@ -1,0 +1,185 @@
+%===============================================================================
+% SMARTEHR FRONT MATTER PACKAGE
+%===============================================================================
+% Description: Provides abstracted commands for generating front matter
+%              including cover page, abstract, TOC, LOT, and LOF
+% Author: Generated from LaTeX Analysis
+% Version: 1.0
+% Date: 2026-03-28
+%===============================================================================
+
+\ProvidesPackage{gimmatek-report-template-frontmatter}[2026/03/28 v1.0 Gimmatek Report Front Matter Abstraction]
+
+%-------------------------------------------------------------------------------
+% Required Packages
+%-------------------------------------------------------------------------------
+\RequirePackage{tikz}
+\RequirePackage{geometry}
+
+%-------------------------------------------------------------------------------
+% Document Abstract Storage
+%-------------------------------------------------------------------------------
+\newcommand{\@docabstract}{}
+\newcommand{\docabstract}[1]{\renewcommand{\@docabstract}{#1}}
+
+%-------------------------------------------------------------------------------
+% Cover Page Configuration
+%-------------------------------------------------------------------------------
+\newcommand{\@coverimage}{img/cover.png}
+\newcommand{\coverimage}[1]{\renewcommand{\@coverimage}{#1}}
+
+%-------------------------------------------------------------------------------
+% Front Matter Flags (Default: all enabled)
+%-------------------------------------------------------------------------------
+\newif\ifincludetoc   \includetoctrue
+\newif\ifincludelot   \includelottrue
+\newif\ifincludelof   \includeloftrue
+\newif\ifincludeabstract   \includeabstracttrue
+
+%-------------------------------------------------------------------------------
+% Cover Page Generation
+%-------------------------------------------------------------------------------
+% Usage: \makecover
+%        \makecover[custom_cover.png]
+\newcommand{\makecover}[1][\@coverimage]{%
+  \begingroup
+  \thispagestyle{empty}
+  \newgeometry{margin=0cm}
+  \begin{tikzpicture}[remember picture,overlay]
+  \node[inner sep=0pt] at (current page.center) {%
+    \includegraphics[width=\paperwidth,height=\paperheight]{#1}
+  };
+  \end{tikzpicture}
+  \clearpage
+  \endgroup
+  \restoregeometry
+}
+
+%-------------------------------------------------------------------------------
+% Front Matter Generation
+%-------------------------------------------------------------------------------
+% Usage: \makefrontmatter
+%
+% Generates:
+%   1. Abstract (if \ifincludeabstract is true and \docabstract is set)
+%   2. Table of Contents (if \ifincludetoc is true)
+%   3. List of Tables (if \ifincludelot is true)
+%   4. List of Figures (if \ifincludelof is true)
+%   5. Switches to arabic page numbering
+%
+% Control with flags:
+%   \includetocfalse     % Skip TOC
+%   \includelotfalse     % Skip LOT
+%   \includeloffalse     % Skip LOF
+%   \includeabstractfalse % Skip abstract
+%
+\newcommand{\makefrontmatter}{%
+  % Abstract
+  \ifincludeabstract
+    \ifx\@docabstract\@empty
+      % No abstract provided, skip
+    \else
+      \chapter*{摘要}
+      \addcontentsline{toc}{chapter}{摘要}
+      \@docabstract
+      \clearpage
+    \fi
+  \fi
+
+  % Table of Contents
+  \ifincludetoc
+    \tableofcontents
+    \clearpage
+  \fi
+
+  % List of Tables
+  \ifincludelot
+    \listoftables
+    \clearpage
+  \fi
+
+  % List of Figures
+  \ifincludelof
+    \listoffigures
+    \clearpage
+  \fi
+
+  % Start main content with arabic numbering
+  \pagenumbering{arabic}
+}
+
+%-------------------------------------------------------------------------------
+% Convenience Commands for TOC Depth Control
+%-------------------------------------------------------------------------------
+% Set depth for all lists at once
+% Usage: \settoclevels{3}{2}{2}
+%   #1 = TOC depth (0=chapter, 1=section, 2=subsection, 3=subsubsection)
+%   #2 = Unused (kept for compatibility)
+%   #3 = Unused (kept for compatibility)
+\newcommand{\settoclevels}[3]{%
+  \setcounter{tocdepth}{#1}
+}
+
+% Convenience commands for common TOC depth settings
+\newcommand{\tocchaptersonly}{\setcounter{tocdepth}{0}}      % Chapters only
+\newcommand{\tocsections}{\setcounter{tocdepth}{1}}         % Up to sections
+\newcommand{\tocsubsections}{\setcounter{tocdepth}{2}}      % Up to subsections (default)
+\newcommand{\tocsubsubsections}{\setcounter{tocdepth}{3}}   % Up to subsubsections
+
+%-------------------------------------------------------------------------------
+% Quick Front Matter Presets
+%-------------------------------------------------------------------------------
+% Minimal: Only TOC
+\newcommand{\makeminimalfrontmatter}{%
+  \includelotfalse
+  \includeloffalse
+  \makefrontmatter
+}
+
+% Standard: TOC + LOF (no LOT, typical for image-heavy manuals)
+\newcommand{\makestandardfrontmatter}{%
+  \includelotfalse
+  \makefrontmatter
+}
+
+% Full: TOC + LOT + LOF (default behavior)
+\newcommand{\makefullfrontmatter}{%
+  \makefrontmatter
+}
+
+%-------------------------------------------------------------------------------
+% Enhanced Front Matter with Custom Abstract Title
+%-------------------------------------------------------------------------------
+% Usage: \makefrontmatterwith{Abstract Title}
+\newcommand{\makefrontmatterwith}[1]{%
+  \ifincludeabstract
+    \ifx\@docabstract\@empty
+    \else
+      \chapter*{#1}
+      \addcontentsline{toc}{chapter}{#1}
+      \@docabstract
+      \clearpage
+    \fi
+  \fi
+
+  \ifincludetoc
+    \tableofcontents
+    \clearpage
+  \fi
+
+  \ifincludelot
+    \listoftables
+    \clearpage
+  \fi
+
+  \ifincludelof
+    \listoffigures
+    \clearpage
+  \fi
+
+  \pagenumbering{arabic}
+}
+
+%===============================================================================
+% END OF PACKAGE
+%===============================================================================

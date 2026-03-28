@@ -1,0 +1,150 @@
+%===============================================================================
+% MINIMAL EXAMPLE: Using Gimmatek LaTeX Template
+%===============================================================================
+% This is the simplest possible document using the template system.
+% Copy this file as a starting point for your own documents.
+%===============================================================================
+
+\documentclass[12pt,a4paper]{gimmatek-report-template}
+
+% Include template packages from parent directory structure
+% Adjust path if your structure is different
+\makeatletter
+\def\input@path{{../packages/}}
+\makeatother
+\RequirePackage{gimmatek-report-frontmatter}
+
+%-------------------------------------------------------------------------------
+% Document Metadata
+%-------------------------------------------------------------------------------
+\doctitle{Minimal Example Document}
+\doctitlepage{Minimal Example Document}
+\docsubtitle{A Simple Demonstration}
+\docversion{V1.0}
+\doctype{Example Document}
+
+%-------------------------------------------------------------------------------
+% Abstract
+%-------------------------------------------------------------------------------
+\docabstract{%
+This is a minimal example demonstrating the Gimmatek LaTeX Template system.
+It shows how to create a professional document with just a few lines of code.
+
+The template handles all front matter generation automatically, including
+table of contents, list of tables, and list of figures.
+}
+
+%===============================================================================
+% DOCUMENT BODY
+%===============================================================================
+\begin{document}
+
+%-------------------------------------------------------------------------------
+% Front Matter - Just 3 commands!
+%-------------------------------------------------------------------------------
+\frontmatter
+\pagenumbering{roman}
+\makefrontmatter  % ← This does all the magic!
+
+%-------------------------------------------------------------------------------
+% Main Content
+%-------------------------------------------------------------------------------
+\mainmatter
+
+\chapter{Introduction}
+
+This is the first chapter of the document. Notice how simple the structure is!
+
+\section{Purpose}
+
+The purpose of this example is to demonstrate:
+
+\begin{itemize}
+\item Minimal setup required
+\item Automatic front matter generation
+\item Professional appearance
+\item Easy content creation
+\end{itemize}
+
+\section{Key Features}
+
+\subsection{Automated Front Matter}
+
+With just one command (\texttt{\textbackslash makefrontmatter}), you get:
+
+\begin{enumerate}
+\item Abstract with Chinese title (摘要)
+\item Table of Contents (目錄)
+\item List of Tables (表目錄)
+\item List of Figures (圖目錄)
+\item Correct page numbering
+\end{enumerate}
+
+\subsection{Professional Styling}
+
+The template provides professional styling out of the box.
+
+\chapter{Using Tables}
+
+\section{Example Table}
+
+Here's a simple table using the booktabs style:
+
+\begin{table}[htbp]
+\centering
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\textbf{Feature} & \textbf{Description} \\
+\midrule
+Auto TOC & Table of contents generated automatically \\
+Auto LOT & List of tables generated automatically \\
+Auto LOF & List of figures generated automatically \\
+Styling & Professional Stanford-inspired design \\
+\bottomrule
+\end{tabularx}
+\caption{Template Features}
+\label{tab:features}
+\end{table}
+
+As shown in Table~\ref{tab:features}, the template provides many automated features.
+
+\chapter{Conclusion}
+
+This minimal example demonstrates how easy it is to create professional
+documents using the Gimmatek LaTeX Template system.
+
+\section{Next Steps}
+
+To create your own document:
+
+\begin{enumerate}
+\item Copy this file as a starting point
+\item Update the metadata (title, version, etc.)
+\item Write your content
+\item Compile with: \texttt{xelatex minimal\_example.tex}
+\end{enumerate}
+
+That's it! The template handles the rest.
+
+\end{document}
+
+%===============================================================================
+% COMPILATION INSTRUCTIONS
+%===============================================================================
+%
+% To compile this document:
+%
+% 1. Ensure you have XeLaTeX installed
+%
+% 2. Set TEXINPUTS to find the template packages:
+%    export TEXINPUTS=.:../packages//:
+%
+% 3. Compile (run twice for references):
+%    xelatex minimal_example.tex
+%    xelatex minimal_example.tex
+%
+% 4. View the PDF:
+%    open minimal_example.pdf  # macOS
+%    xdg-open minimal_example.pdf  # Linux
+%
+%===============================================================================
